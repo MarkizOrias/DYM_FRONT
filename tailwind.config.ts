@@ -13,8 +13,13 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      // Add animation utilities here
+      animation: {
+        expandWidthHeight: 'expandWidthHeight 0.5s forwards'
+      }
     },
   },
   plugins: [],
 };
+
 export default config;
