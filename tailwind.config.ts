@@ -15,6 +15,7 @@ const config: Config = {
       },
       // Add animation utilities here
       animation: {
+        expandWidth: 'expandWidth 0.5s forwards',
         expandWidthHeight: 'expandWidthHeight 0.5s forwards'
       }
     },

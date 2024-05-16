@@ -2,10 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes expandWidth {
+    from {
+        width: 0;
+        /* Starts at a fixed width */
+    }
+
+    to {
+        width: 100%;
+        /* Expands to the full width of its container */
+    }
+}
+
 @keyframes expandWidthHeight {
     from {
-        width: 6rem;
-        height: 3rem;
+        width: 0;
+        height: 0;
         /* Starts at a fixed width */
     }
 
