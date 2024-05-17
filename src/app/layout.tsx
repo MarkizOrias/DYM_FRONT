@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { ThirdwebProvider } from "thirdweb/react";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,9 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-gray-100`}>
-        <Navbar />
-        {children}
-        <Footer />
+        <ThirdwebProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </ThirdwebProvider>
       </body>
     </html>
   );
