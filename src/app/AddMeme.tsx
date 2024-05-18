@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from 'react';
-
+import Image from 'next/image';
 type AddMemeProps = {
 
 };
@@ -73,7 +73,7 @@ const AddMeme: React.FC<AddMemeProps> = () => {
         <div className='flex flex-col w-full h-full p-4 overflow-auto'>
             <div className='animate-expandWidth flex flex-row  h-1/4 mb-2 rounded bg-slate-600'>
                 <div className='flex flex-col w-1/4 items-center'>
-                    <label className='m-4'>Meme's name*</label>
+                    <label className='m-4'>Meme name*</label>
                     <div className='px-4 mb-4 w-full h-full'>
                         <input className='w-full h-full text-center rounded'></input>
                     </div>
@@ -94,7 +94,13 @@ const AddMeme: React.FC<AddMemeProps> = () => {
                     className={`w-full h-full flex flex-col items-center rounded justify-center overflow-hidden ${dragging ? 'bg-red-300' : 'bg-blue-300'}`}
                 >
                     {imagePreviewUrl ? (
-                        <img src={imagePreviewUrl} alt="Uploaded Preview" className="max-w-full max-h-full object-contain rounded" />
+                        <Image
+                            src={imagePreviewUrl} alt="Uploaded Preview"
+                            className="max-w-full max-h-full object-contain rounded"
+                            width={500} // Adjust according to your actual image's aspect ratio
+                            height={300} // Adjust according to your actual image's aspect ratio
+                            layout='responsive' // This makes the image scale with the parent container
+                        />
                     ) : (
                         <p>{dragging ? "Drop the file here..." : "Drag and drop an image here or click to upload"}</p>
                     )}
