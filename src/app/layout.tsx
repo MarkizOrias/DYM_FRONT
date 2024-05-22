@@ -21,11 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-gray-100`}>
-        <ThirdwebProvider>
-          <Navbar />
-          {children}
-          <Footer />
-        </ThirdwebProvider>
+        {/* <ThirdwebProvider> */}
+        <Navbar />
+        {children}
+        <Footer />
+        {/* </ThirdwebProvider> */}
       </body>
     </html>
   );

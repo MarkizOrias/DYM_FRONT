@@ -1,19 +1,15 @@
-"use client";
+'use client';
 
 import React, { useState, useRef } from 'react';
 
-type AddMemeProps = {
-
-};
+type AddMemeProps = {};
 
 const AddMeme: React.FC<AddMemeProps> = () => {
-    const [addMemeClicked, setIsExpanded] = useState(false);
     const [dragging, setDragging] = useState(false);
     const [file, setFile] = useState<File | null>(null);
     const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
     const [videoLink, setVideoLink] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
-
 
     const handleDragOver = (e: React.DragEvent) => {
         e.preventDefault();
@@ -69,9 +65,18 @@ const AddMeme: React.FC<AddMemeProps> = () => {
         fileInputRef.current?.click();
     };
 
+    const handleSubmit = () => {
+        const data = {
+            type: file ? 'image' : 'video',
+            content: file ? imagePreviewUrl : videoLink,
+        };
+        localStorage.setItem('adminReview', JSON.stringify(data));
+    };
+
+
     return (
         <div className='flex flex-col w-full h-full p-4 overflow-auto'>
-            <div className='animate-expandWidth flex flex-row  h-1/4 mb-2 rounded bg-slate-600'>
+            <div className='animate-expandWidth flex flex-row h-1/4 mb-2 rounded bg-slate-600'>
                 <div className='flex flex-col w-1/4 items-center'>
                     <label className='m-4'>Meme's name*</label>
                     <div className='px-4 mb-4 w-full h-full'>
@@ -85,7 +90,7 @@ const AddMeme: React.FC<AddMemeProps> = () => {
                     </div>
                 </div>
             </div>
-            <div className='animate-expandWidth flex flex-col p-4 h-full mb-2 rounded  bg-slate-600'>
+            <div className='animate-expandWidth flex flex-col p-4 h-full mb-2 rounded bg-slate-600'>
                 <div
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
@@ -114,11 +119,10 @@ const AddMeme: React.FC<AddMemeProps> = () => {
                         placeholder="Or paste a YouTube link here"
                         className="mt-4 p-2 w-full rounded"
                     />
-                    <button className="mt-4 ml-2 p-2 bg-blue-500 rounded text-white">Submit</button>
+                    <button onClick={handleSubmit} className="mt-4 ml-2 p-2 bg-blue-500 rounded text-white">Submit</button>
                 </div>
             </div>
         </div>
-
     );
 };
 

@@ -18,13 +18,13 @@ const Navbar: React.FC<NavbarProps> = () => {
                         <div className='hidden md:flex space-x-6 items-center text-stone-400'>
                             <a href='/about' className='hover:text-cyan-400'><p className='align-middle'>ABOUT</p></a>
                             <a href='/admin' className='hover:text-cyan-400'>ADMIN</a>
-                            <ConnectButton
+                            {/* <ConnectButton
                                 client={client}
                                 appMetadata={{
                                     name: "Example App",
                                     url: "https://example.com",
                                 }}
-                            />
+                            /> */}
                             <a href='#' className='hover:text-cyan-400'>THEME</a>
                         </div>
                     </div>
