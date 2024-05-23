@@ -1,15 +1,10 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-<<<<<<< HEAD
-
-type AddMemeProps = {};
-=======
 import Image from 'next/image';
 type AddMemeProps = {
 
 };
->>>>>>> f8bba8906d190ba2916ca078c2a824d0716bf247
 
 const AddMeme: React.FC<AddMemeProps> = () => {
     const [dragging, setDragging] = useState(false);
