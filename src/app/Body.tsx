@@ -2,9 +2,7 @@
 import AddMeme from "./AddMeme";
 import React, { useState, useEffect } from 'react';
 
-type BodyProps = {
-    // You can add props definitions here if needed
-};
+type BodyProps = {};
 
 const Body: React.FC<BodyProps> = () => {
     const [isExpanded, setIsExpanded] = useState(false);
