@@ -1,24 +1,21 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
+
 
 export default function Admin() {
-    const [reviewData, setReviewData] = useState<{ type: string; content: string | null }>({ type: '', content: null });
-    const [file, setFile] = useState<File | null>(null);
-    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
-    const [videoLink, setVideoLink] = useState('');
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [reviewData, setReviewData] = useState({
+        type: '',
+        content: null,
+        name: '',
+        ticker: ''
+    });
 
     useEffect(() => {
         const data = localStorage.getItem('adminReview');
         if (data) {
             const parsedData = JSON.parse(data);
             setReviewData(parsedData);
-            if (parsedData.type === 'image') {
-                setImagePreviewUrl(parsedData.content);
-            } else {
-                setVideoLink(parsedData.content);
-            }
         }
     }, []);
 
@@ -26,16 +23,17 @@ export default function Admin() {
         const data = {
             type: reviewData.type,
             content: reviewData.content,
+            name: reviewData.name,
+            ticker: reviewData.ticker
         };
         localStorage.removeItem('adminReview');
         localStorage.setItem('adminApproved', JSON.stringify(data));
-        // Optionally, you might want to clear the review data or navigate away after approving
-        setReviewData({ type: '', content: null });
+        setReviewData({ type: '', content: null, name: '', ticker: '' });
     };
 
     const handleReject = () => {
         localStorage.removeItem('adminReview');
-        setReviewData({ type: '', content: null }); // Clears the content from state
+        setReviewData({ type: '', content: null, name: '', ticker: '' });
     };
 
     return (
@@ -49,8 +47,11 @@ export default function Admin() {
             ) : (
                 <p>No content to review</p>
             )}
-            <button onClick={handleApprove} className="m-2 bg-green-500 rounded text-white p-2">Approve</button>
-            <button onClick={handleReject} className="m-2 bg-red-500 rounded text-white p-2">Reject</button>
+            <div className='text-lg font-bold mt-2'>{reviewData.name} ({reviewData.ticker})</div>
+            <div className='flex-row'>
+                <button onClick={handleApprove} className="m-2 bg-green-500 rounded text-white p-2">Approve</button>
+                <button onClick={handleReject} className="m-2 bg-red-500 rounded text-white p-2">Reject</button>
+            </div>
         </div>
     );
 }

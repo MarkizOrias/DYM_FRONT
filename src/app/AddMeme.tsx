@@ -12,6 +12,9 @@ const AddMeme: React.FC<AddMemeProps> = () => {
     const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
     const [videoLink, setVideoLink] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [memeName, setMemeName] = useState('');
+    const [memeTicker, setMemeTicker] = useState('');
+
 
     const handleDragOver = (e: React.DragEvent) => {
         e.preventDefault();
@@ -71,6 +74,8 @@ const AddMeme: React.FC<AddMemeProps> = () => {
         const data = {
             type: file ? 'image' : 'video',
             content: file ? imagePreviewUrl : videoLink,
+            name: memeName,
+            ticker: memeTicker
         };
         localStorage.setItem('adminReview', JSON.stringify(data));
     };
@@ -79,16 +84,24 @@ const AddMeme: React.FC<AddMemeProps> = () => {
     return (
         <div className='flex flex-col w-full h-full p-4 overflow-auto'>
             <div className='animate-expandWidth flex flex-row h-1/4 mb-2 rounded bg-slate-600'>
-                <div className='flex flex-col w-1/4 items-center'>
+                <div className='flex flex-col w-1/2 items-center'>
                     <label className='m-4'>Meme name*</label>
                     <div className='px-4 mb-4 w-full h-full'>
-                        <input className='w-full h-full text-center rounded'></input>
+                        <input
+                            className='w-full h-full text-center rounded'
+                            value={memeName}
+                            onChange={(e) => setMemeName(e.target.value)}
+                        />
                     </div>
                 </div>
-                <div className='flex flex-col w-3/4 items-center'>
-                    <label className='m-4'>Description</label>
-                    <div className='px-4 pl-0 mb-4 w-full h-full'>
-                        <input className='w-full h-full text-center rounded'></input>
+                <div className='flex flex-col w-1/2 items-center pr-4'>
+                    <label className='m-4'>Meme ticker*</label>
+                    <div className='mb-4 w-full h-full'>
+                        <input
+                            className='w-full h-full text-center rounded'
+                            value={memeTicker}
+                            onChange={(e) => setMemeTicker(e.target.value)}
+                        />
                     </div>
                 </div>
             </div>

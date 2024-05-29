@@ -1,31 +1,42 @@
-'use client';
+'use client'
 import React from 'react';
 import { ConnectButton } from "thirdweb/react";
 import { client } from "./client";
 import Image from "next/image";
+import { useActiveAccount } from "thirdweb/react";
+import Link from 'next/link';
 
-type NavbarProps = {
-    // You can define props here if needed
-};
+const adminAddress = process.env.NEXT_PUBLIC_ADMIN_ADDRESS;
 
-const Navbar: React.FC<NavbarProps> = () => {
+const Navbar: React.FC = () => {
+
+    const activeAccount = useActiveAccount();
+
+    const isAdmin = () => {
+        return activeAccount && activeAccount.address && adminAddress &&
+            activeAccount.address.toLowerCase() === adminAddress.toLowerCase();
+    };
+
     return (
         <>
             <header className='flex-none'>
                 <nav className='relative mx-auto p-6'>
                     <div className='flex items-center justify-between'>
-                        <div className='py-2'>
-                            <Image
-                                src="/img/logo.svg"
-                                alt="Logo"
-                                width={500} // Adjust according to your actual image's aspect ratio
-                                height={300} // Adjust according to your actual image's aspect ratio
-                                layout='responsive' // This makes the image scale with the parent container
-                            />
+                        <div className='py-2 static h-20 w-20'>
+                            <Link href="/" passHref>
+                                <Image
+                                    src="/logo.png"
+                                    alt="Logo"
+                                    width={50}
+                                    height={50}
+                                    layout='responsive'
+                                />
+                            </Link>
                         </div>
                         <div className='hidden md:flex space-x-6 items-center text-stone-400'>
-                            <a href='/about' className='hover:text-cyan-400'><p className='align-middle'>ABOUT</p></a>
-                            <a href='/admin' className='hover:text-cyan-400'>ADMIN</a>
+                            <a href='/about' className='hover:text-cyan-400'>ABOUT</a>
+                            {isAdmin() && <a href='/admin' className='hover:text-cyan-400'>ADMIN</a>}
+                            <a href='/profile' className='hover:text-cyan-400'>PROFILE</a>
                             <ConnectButton
                                 client={client}
                                 appMetadata={{
