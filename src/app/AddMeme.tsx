@@ -1,7 +1,9 @@
 import React, { useState, useRef, DragEvent, ChangeEvent } from 'react';
 import Image from 'next/image';
+// import { useAddress, useContract, useConnectionStatus, useContractRead, useContractWrite } from '@thirdweb-dev/react'
+import memeProcMgr from '/constants/MemeProcessManager.json';
 
-// Define an interface for the component props if needed
+
 interface AddMemeProps {
     closeModal: () => void;
 }
@@ -15,6 +17,16 @@ const AddMeme: React.FC<AddMemeProps> = ({ closeModal }) => {
     const [memeName, setMemeName] = useState<string>('');
     const [memeTicker, setMemeTicker] = useState<string>('');
     const [showModal, setShowModal] = useState<boolean>(true); // State to control modal visibility
+
+
+    const contractAddress = memeProcMgr.address;
+    const abi = memeProcMgr.abi;
+
+
+    const { contract } = useContract(contractAddress, abi);
+    const account = useAddress();
+    const handleBuy = useContractWrite(contract, "buyLicense");
+
 
     const handleDragOver = (e: DragEvent<HTMLDivElement>): void => {
         e.preventDefault();
@@ -82,6 +94,31 @@ const AddMeme: React.FC<AddMemeProps> = ({ closeModal }) => {
     };
 
     if (!showModal) return null; // Don't render the modal if showModal is false
+
+    async function addWeb3Meme() {
+
+        const placeBid = {
+            abi: absImpAbi,
+            contractAddress: absImpAddress,
+            functionName: "placeBid",
+            msgValue: bidAmount * 10 ** 18,
+            params: {
+                tokenId: currTokenId,
+            },
+        }
+
+        await runContractFunction({
+            params: placeBid,
+            onError: () => handleBidError(),
+            onSuccess: () => handleBidSuccess(),
+            onError: (error) => {
+                setBidTooSmall(true)
+                setIsVerified(false)
+                recaptchaRef.current.reset()
+            }
+        })
+
+    }
 
     return (
         <div className='flex flex-col w-full h-full p-4 overflow-auto'>
