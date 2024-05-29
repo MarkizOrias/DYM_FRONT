@@ -1,32 +1,32 @@
-'use client';
-
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, DragEvent, ChangeEvent } from 'react';
 import Image from 'next/image';
-type AddMemeProps = {
 
-};
+// Define an interface for the component props if needed
+interface AddMemeProps {
+    closeModal: () => void;
+}
 
-const AddMeme: React.FC<AddMemeProps> = () => {
-    const [dragging, setDragging] = useState(false);
+const AddMeme: React.FC<AddMemeProps> = ({ closeModal }) => {
+    const [dragging, setDragging] = useState<boolean>(false);
     const [file, setFile] = useState<File | null>(null);
     const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
-    const [videoLink, setVideoLink] = useState('');
+    const [videoLink, setVideoLink] = useState<string>('');
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [memeName, setMemeName] = useState('');
-    const [memeTicker, setMemeTicker] = useState('');
+    const [memeName, setMemeName] = useState<string>('');
+    const [memeTicker, setMemeTicker] = useState<string>('');
+    const [showModal, setShowModal] = useState<boolean>(true); // State to control modal visibility
 
-
-    const handleDragOver = (e: React.DragEvent) => {
+    const handleDragOver = (e: DragEvent<HTMLDivElement>): void => {
         e.preventDefault();
         setDragging(true);
     };
 
-    const handleDragLeave = (e: React.DragEvent) => {
+    const handleDragLeave = (e: DragEvent<HTMLDivElement>): void => {
         e.preventDefault();
         setDragging(false);
     };
 
-    const handleDrop = (e: React.DragEvent) => {
+    const handleDrop = (e: DragEvent<HTMLDivElement>): void => {
         e.preventDefault();
         setDragging(false);
         const files = e.dataTransfer.files;
@@ -41,7 +41,7 @@ const AddMeme: React.FC<AddMemeProps> = () => {
         }
     };
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const files = e.target.files;
         if (files && files.length > 0) {
             const file = files[0];
@@ -54,7 +54,7 @@ const AddMeme: React.FC<AddMemeProps> = () => {
         }
     };
 
-    const previewFile = (file: File) => {
+    const previewFile = (file: File): void => {
         const reader = new FileReader();
         reader.onloadend = () => {
             setImagePreviewUrl(reader.result as string);
@@ -62,15 +62,15 @@ const AddMeme: React.FC<AddMemeProps> = () => {
         reader.readAsDataURL(file);
     };
 
-    const handleLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleLinkChange = (e: ChangeEvent<HTMLInputElement>): void => {
         setVideoLink(e.target.value);
     };
 
-    const handleDivClick = () => {
+    const handleDivClick = (): void => {
         fileInputRef.current?.click();
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = (): void => {
         const data = {
             type: file ? 'image' : 'video',
             content: file ? imagePreviewUrl : videoLink,
@@ -78,8 +78,10 @@ const AddMeme: React.FC<AddMemeProps> = () => {
             ticker: memeTicker
         };
         localStorage.setItem('adminReview', JSON.stringify(data));
+        closeModal(); // Close modal after submitting
     };
 
+    if (!showModal) return null; // Don't render the modal if showModal is false
 
     return (
         <div className='flex flex-col w-full h-full p-4 overflow-auto'>

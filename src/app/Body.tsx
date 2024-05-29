@@ -1,6 +1,6 @@
 'use client';
-import AddMeme from "./AddMeme";
 import React, { useState, useEffect } from 'react';
+import AddMeme from "./AddMeme";
 
 type BodyProps = {};
 
@@ -17,6 +17,10 @@ const Body: React.FC<BodyProps> = () => {
 
     const handleButtonClick = () => {
         setIsExpanded(!isExpanded);
+    };
+
+    const closeModal = () => {
+        setIsExpanded(false);
     };
 
     return (
@@ -37,7 +41,7 @@ const Body: React.FC<BodyProps> = () => {
                     >{isExpanded ? "Hide form" : "Add your own meme"}
                     </button>
                     <div id="expandableDiv" className={`flex flex-col items-center rounded ${isExpanded ? 'animate-expandWidthHeight overflow-auto' : ''} bg-slate-200`}>
-                        {isExpanded && <AddMeme />}
+                        {isExpanded && <AddMeme closeModal={closeModal} />}
                     </div>
                     <div className={`flex-col w-full overflow-y-scroll ${isExpanded ? 'hidden' : ''}`}>
                         <div className='flex flex-col mb-2 rounded static bg-slate-200 w-full'>
