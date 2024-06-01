@@ -22,13 +22,13 @@ const Navbar: React.FC = () => {
             <header className='flex-none'>
                 <nav className='relative mx-auto p-6'>
                     <div className='flex items-center justify-between'>
-                        <div className='py-2 static h-20 w-20'>
+                        <div className='py-1 static h-20 w-20'>
                             <Link href="/" passHref>
                                 <Image
-                                    src="/logo.png"
+                                    src="/LOGOTransparent.png"
                                     alt="Logo"
-                                    width={50}
-                                    height={50}
+                                    width={40}
+                                    height={40}
                                     layout='responsive'
                                 />
                             </Link>

@@ -56,21 +56,21 @@ const Body: React.FC<BodyProps> = () => {
                                     <p>No content to review</p>
                                 )}
                             </div>
-                            <div className='flex justify-start space-x-6 m-2'>
+                            <div className='flex justify-start space-x-2 m-2'>
                                 <div>
-                                    <p>*Like icon*</p>
+                                    <img src='/bx-heart-circle.svg' alt='Like icon' width={24} height={24} />
                                 </div>
                                 <div>
                                     <p>Like</p>
                                 </div>
                                 <div>
-                                    <p>*Fund icon*</p>
+                                    <img src='/bx-coin-stack.svg' alt='Fund icon' width={24} height={24} />
                                 </div>
                                 <div>
                                     <p>Fund</p>
                                 </div>
                                 <div>
-                                    <p>*Comment icon*</p>
+                                    <img src='/bx-comment.svg' alt='Comment icon' width={24} height={24} />
                                 </div>
                                 <div>
                                     <p>Comment</p>
