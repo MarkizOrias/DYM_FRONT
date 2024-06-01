@@ -4,7 +4,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import { ThirdwebProvider } from "thirdweb/react";
+import { ThirdwebProvider } from "@thirdweb-dev/react"
+import { Sepolia } from "@thirdweb-dev/chains"
+import { Toaster } from "react-hot-toast"
 import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
 
 const client = new ApolloClient({
@@ -25,10 +27,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const clientId = process.env.CLIENT_ID || ""
+  const activeChain = Sepolia
   return (
     <html lang="en">
       <body className={`${inter.className} bg-gray-100`}>
-        <ThirdwebProvider>
+        <ThirdwebProvider clientId={clientId} activeChain={activeChain} supportedChains={[activeChain]}>
           <ApolloProvider client={client}>
             <Navbar />
             {children}

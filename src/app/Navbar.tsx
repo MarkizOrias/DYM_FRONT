@@ -3,18 +3,18 @@ import React from 'react';
 import { ConnectButton } from "thirdweb/react";
 import { client } from "./client";
 import Image from "next/image";
-import { useActiveAccount } from "thirdweb/react";
+import { ConnectWallet, darkTheme, useAddress } from "@thirdweb-dev/react"
 import Link from 'next/link';
 
 const adminAddress = process.env.NEXT_PUBLIC_ADMIN_ADDRESS;
 
 const Navbar: React.FC = () => {
 
-    const activeAccount = useActiveAccount();
+    const activeAccount = useAddress();
 
     const isAdmin = () => {
-        return activeAccount && activeAccount.address && adminAddress &&
-            activeAccount.address.toLowerCase() === adminAddress.toLowerCase();
+        return activeAccount && activeAccount && adminAddress &&
+            activeAccount.toLowerCase() === adminAddress.toLowerCase();
     };
 
     return (
@@ -37,12 +37,22 @@ const Navbar: React.FC = () => {
                             <a href='/about' className='hover:text-cyan-400'>ABOUT</a>
                             {isAdmin() && <a href='/admin' className='hover:text-cyan-400'>ADMIN</a>}
                             <a href='/profile' className='hover:text-cyan-400'>PROFILE</a>
-                            <ConnectButton
-                                client={client}
-                                appMetadata={{
-                                    name: "Example App",
-                                    url: "https://example.com",
-                                }}
+                            <ConnectWallet
+                                theme={darkTheme({
+                                    colors: {
+                                        primaryButtonText: "#fff",
+                                        primaryText: "#5acdf1",
+                                        primaryButtonBg: "#9833e3",
+                                        connectedButtonBg: "#20093d",
+                                        connectedButtonBgHover: "#4d0dab",
+                                        modalBg: "#1d093c",
+                                        dropdownBg: "#1d093c",
+                                        secondaryButtonBg: "#fff",
+                                        walletSelectorButtonHoverBg: "#411c91",
+                                    },
+                                })}
+                                modalSize={"wide"}
+                                switchToActiveChain={true}
                             />
                             <a href='#' className='hover:text-cyan-400'>THEME</a>
                         </div>

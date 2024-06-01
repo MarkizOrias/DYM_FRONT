@@ -1,86 +1,100 @@
-import React, { useState, useRef, DragEvent, ChangeEvent } from 'react';
-import Image from 'next/image';
-// import { useAddress, useContract, useConnectionStatus, useContractRead, useContractWrite } from '@thirdweb-dev/react'
-import memeProcMgr from '/constants/MemeProcessManager.json';
-
+import React, { useState, useRef, DragEvent, ChangeEvent } from 'react'
+import Image from 'next/image'
+import memeProcMgr from '../../constants/MemeProcessManager.json'
+import { handleError, handleSuccess } from "../../lib/error-handlers"
+import { getErrorMessage } from "../../lib/utils"
+import { useAddress, useContract, useConnectionStatus, useContractRead, useContractWrite } from "@thirdweb-dev/react"
 
 interface AddMemeProps {
-    closeModal: () => void;
+    closeModal: () => void
 }
 
 const AddMeme: React.FC<AddMemeProps> = ({ closeModal }) => {
-    const [dragging, setDragging] = useState<boolean>(false);
-    const [file, setFile] = useState<File | null>(null);
-    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
-    const [videoLink, setVideoLink] = useState<string>('');
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const [memeName, setMemeName] = useState<string>('');
-    const [memeTicker, setMemeTicker] = useState<string>('');
-    const [showModal, setShowModal] = useState<boolean>(true); // State to control modal visibility
+    const [dragging, setDragging] = useState<boolean>(false)
+    const [file, setFile] = useState<File | null>(null)
+    const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null)
+    const [videoLink, setVideoLink] = useState<string>('')
+    const fileInputRef = useRef<HTMLInputElement>(null)
+    const [memeName, setMemeName] = useState<string>('')
+    const [memeTicker, setMemeTicker] = useState<string>('')
+    const [showModal, setShowModal] = useState<boolean>(true) // State to control modal visibility
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
+    const contractAddress = memeProcMgr.address
+    const abi = memeProcMgr.abi
 
-    const contractAddress = memeProcMgr.address;
-    const abi = memeProcMgr.abi;
+    const { contract } = useContract(contractAddress, abi)
+    const account = useAddress()
+    const connectionStatus = useConnectionStatus()
+    const handleCreateMeme = useContractWrite(contract, "createMeme")
 
+    const handleCreateMemeTRX = async () => {
+        if (connectionStatus === "connected") {
+            setIsLoading(true)
 
-    const { contract } = useContract(contractAddress, abi);
-    const account = useAddress();
-    const handleBuy = useContractWrite(contract, "buyLicense");
-
+            if (contract) {
+                try {
+                    await handleCreateMeme.mutateAsync({ args: [memeName, memeTicker] })
+                } catch (error) {
+                    handleError(getErrorMessage(error))
+                }
+            }
+        }
+    }
 
     const handleDragOver = (e: DragEvent<HTMLDivElement>): void => {
-        e.preventDefault();
-        setDragging(true);
-    };
+        e.preventDefault()
+        setDragging(true)
+    }
 
     const handleDragLeave = (e: DragEvent<HTMLDivElement>): void => {
-        e.preventDefault();
-        setDragging(false);
-    };
+        e.preventDefault()
+        setDragging(false)
+    }
 
     const handleDrop = (e: DragEvent<HTMLDivElement>): void => {
-        e.preventDefault();
-        setDragging(false);
-        const files = e.dataTransfer.files;
+        e.preventDefault()
+        setDragging(false)
+        const files = e.dataTransfer.files
         if (files.length > 0) {
-            const file = files[0];
+            const file = files[0]
             if (file.type.match('image.*')) {
-                setFile(file);
-                previewFile(file);
+                setFile(file)
+                previewFile(file)
             } else {
-                alert('Please drop an image file.');
+                alert('Please drop an image file.')
             }
         }
-    };
+    }
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        const files = e.target.files;
+        const files = e.target.files
         if (files && files.length > 0) {
-            const file = files[0];
+            const file = files[0]
             if (file.type.match('image.*')) {
-                setFile(file);
-                previewFile(file);
+                setFile(file)
+                previewFile(file)
             } else {
-                alert('Please select an image file.');
+                alert('Please select an image file.')
             }
         }
-    };
+    }
 
     const previewFile = (file: File): void => {
-        const reader = new FileReader();
+        const reader = new FileReader()
         reader.onloadend = () => {
-            setImagePreviewUrl(reader.result as string);
-        };
-        reader.readAsDataURL(file);
-    };
+            setImagePreviewUrl(reader.result as string)
+        }
+        reader.readAsDataURL(file)
+    }
 
     const handleLinkChange = (e: ChangeEvent<HTMLInputElement>): void => {
-        setVideoLink(e.target.value);
-    };
+        setVideoLink(e.target.value)
+    }
 
     const handleDivClick = (): void => {
-        fileInputRef.current?.click();
-    };
+        fileInputRef.current?.click()
+    }
 
     const handleSubmit = (): void => {
         const data = {
@@ -88,37 +102,12 @@ const AddMeme: React.FC<AddMemeProps> = ({ closeModal }) => {
             content: file ? imagePreviewUrl : videoLink,
             name: memeName,
             ticker: memeTicker
-        };
-        localStorage.setItem('adminReview', JSON.stringify(data));
-        closeModal(); // Close modal after submitting
-    };
-
-    if (!showModal) return null; // Don't render the modal if showModal is false
-
-    async function addWeb3Meme() {
-
-        const placeBid = {
-            abi: absImpAbi,
-            contractAddress: absImpAddress,
-            functionName: "placeBid",
-            msgValue: bidAmount * 10 ** 18,
-            params: {
-                tokenId: currTokenId,
-            },
         }
-
-        await runContractFunction({
-            params: placeBid,
-            onError: () => handleBidError(),
-            onSuccess: () => handleBidSuccess(),
-            onError: (error) => {
-                setBidTooSmall(true)
-                setIsVerified(false)
-                recaptchaRef.current.reset()
-            }
-        })
-
+        localStorage.setItem('adminReview', JSON.stringify(data))
+        closeModal() // Close modal after submitting
     }
+
+    if (!showModal) return null // Don't render the modal if showModal is false
 
     return (
         <div className='flex flex-col w-full h-full p-4 overflow-auto'>
@@ -183,7 +172,7 @@ const AddMeme: React.FC<AddMemeProps> = ({ closeModal }) => {
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default AddMeme;
+export default AddMeme
