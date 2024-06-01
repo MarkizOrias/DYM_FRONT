@@ -24,7 +24,6 @@ const AddMeme: React.FC<AddMemeProps> = ({ closeModal }) => {
     const abi = memeProcMgr.abi
 
     const { contract } = useContract(contractAddress, abi)
-    const account = useAddress()
     const connectionStatus = useConnectionStatus()
     const handleCreateMeme = useContractWrite(contract, "createMeme")
 

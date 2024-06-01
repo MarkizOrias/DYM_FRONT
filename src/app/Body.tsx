@@ -1,12 +1,15 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import AddMeme from "./AddMeme";
+import LikeMeme from "./LikeMeme";
+import FundMeme from "./FundMeme";
 
 type BodyProps = {};
 
 const Body: React.FC<BodyProps> = () => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [approvedData, setApprovedData] = useState<{ type: string; content: string | null }>({ type: '', content: null });
+    const memeID = "example-meme-id";
 
     useEffect(() => {
         const data = localStorage.getItem('adminApproved');
@@ -56,18 +59,12 @@ const Body: React.FC<BodyProps> = () => {
                                     <p>No content to review</p>
                                 )}
                             </div>
-                            <div className='flex justify-start space-x-2 m-2'>
+                            <div className='flex justify-start space-x-2 p-2'>
                                 <div>
-                                    <img src='/bx-heart-circle.svg' alt='Like icon' width={24} height={24} />
+                                    <LikeMeme />
                                 </div>
                                 <div>
-                                    <p>Like</p>
-                                </div>
-                                <div>
-                                    <img src='/bx-coin-stack.svg' alt='Fund icon' width={24} height={24} />
-                                </div>
-                                <div>
-                                    <p>Fund</p>
+                                    <FundMeme memeID={memeID} />
                                 </div>
                                 <div>
                                     <img src='/bx-comment.svg' alt='Comment icon' width={24} height={24} />
