@@ -35,10 +35,17 @@ const AddMeme: React.FC<AddMemeProps> = ({ closeModal }) => {
             if (contract) {
                 try {
                     await handleCreateMeme.mutateAsync({ args: [memeName, memeTicker] })
+                    closeModal() // Close modal after the transaction is approved
                 } catch (error) {
                     handleError(getErrorMessage(error))
+                } finally {
+                    setIsLoading(false)
                 }
+            } else {
+                handleError("Error: \nContract does not exists")
             }
+        } else {
+            handleError("Error: \nWallet Not Connected")
         }
     }
 
@@ -104,7 +111,7 @@ const AddMeme: React.FC<AddMemeProps> = ({ closeModal }) => {
             ticker: memeTicker
         }
         localStorage.setItem('adminReview', JSON.stringify(data))
-        closeModal() // Close modal after submitting
+        handleCreateMemeTRX()
     }
 
     if (!showModal) return null // Don't render the modal if showModal is false
