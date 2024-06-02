@@ -46,7 +46,6 @@ const Navbar: React.FC = () => {
                                         connectedButtonBg: "#20093d",
                                         connectedButtonBgHover: "#4d0dab",
                                         modalBg: "#1d093c",
-                                        dropdownBg: "#1d093c",
                                         secondaryButtonBg: "#fff",
                                         walletSelectorButtonHoverBg: "#411c91",
                                     },
