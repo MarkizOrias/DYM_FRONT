@@ -10,15 +10,14 @@
   },
   "dependencies": {
     "@apollo/client": "^3.10.4",
-    "@thirdweb-dev/react": "^4.6.28",
-    "ethers": "^5",
+    "@thirdweb-dev/react": "^4.6.30",
     "graphql": "^16.8.1",
     "next": "14.2.2",
     "pino-pretty": "^11.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
-    "thirdweb": "^5.22.1"
+    "thirdweb": "^5.27.0"
   },
   "devDependencies": {
     "@types/node": "^20",

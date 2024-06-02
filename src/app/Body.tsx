@@ -8,8 +8,7 @@ type BodyProps = {};
 
 const Body: React.FC<BodyProps> = () => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const [approvedData, setApprovedData] = useState<{ type: string; content: string | null }>({ type: '', content: null });
-    const memeID = "example-meme-id";
+    const [approvedData, setApprovedData] = useState<{ type: string; content: string | null; memeId: string }>({ type: '', content: null, memeId: '' });
 
     useEffect(() => {
         const data = localStorage.getItem('adminApproved');
@@ -64,7 +63,7 @@ const Body: React.FC<BodyProps> = () => {
                                     <LikeMeme />
                                 </div>
                                 <div>
-                                    <FundMeme memeID={memeID} />
+                                    <FundMeme memeId={approvedData.memeId} />
                                 </div>
                                 <div>
                                     <img src='/bx-comment.svg' alt='Comment icon' width={24} height={24} />

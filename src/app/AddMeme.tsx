@@ -4,6 +4,7 @@ import memeProcMgr from '../../constants/MemeProcessManager.json'
 import { handleError, handleSuccess } from "../../lib/error-handlers"
 import { getErrorMessage } from "../../lib/utils"
 import { useAddress, useContract, useConnectionStatus, useContractRead, useContractWrite } from "@thirdweb-dev/react"
+import { useMemeCount } from '../../graph_queries/subQ'
 
 interface AddMemeProps {
     closeModal: () => void
@@ -19,6 +20,7 @@ const AddMeme: React.FC<AddMemeProps> = ({ closeModal }) => {
     const [memeTicker, setMemeTicker] = useState<string>('')
     const [showModal, setShowModal] = useState<boolean>(true) // State to control modal visibility
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const memeCount = useMemeCount();
 
     const contractAddress = memeProcMgr.address
     const abi = memeProcMgr.abi
@@ -29,24 +31,25 @@ const AddMeme: React.FC<AddMemeProps> = ({ closeModal }) => {
 
     const handleCreateMemeTRX = async () => {
         if (connectionStatus === "connected") {
-            setIsLoading(true)
+            setIsLoading(true);
 
             if (contract) {
                 try {
-                    await handleCreateMeme.mutateAsync({ args: [memeName, memeTicker] })
-                    closeModal() // Close modal after the transaction is approved
+                    await handleCreateMeme.mutateAsync({ args: [memeName, memeTicker] });
+                    closeModal(); // Close modal after the transaction is approved
                 } catch (error) {
-                    handleError(getErrorMessage(error))
+                    handleError(getErrorMessage(error));
                 } finally {
-                    setIsLoading(false)
+                    setIsLoading(false);
                 }
             } else {
-                handleError("Error: \nContract does not exists")
+                handleError("Error: \nContract does not exist");
             }
         } else {
-            handleError("Error: \nWallet Not Connected")
+            handleError("Error: \nWallet Not Connected");
         }
-    }
+    };
+
 
     const handleDragOver = (e: DragEvent<HTMLDivElement>): void => {
         e.preventDefault()
@@ -103,13 +106,16 @@ const AddMeme: React.FC<AddMemeProps> = ({ closeModal }) => {
     }
 
     const handleSubmit = (): void => {
+
+        // Create the data object with memeId
         const data = {
             type: file ? 'image' : 'video',
             content: file ? imagePreviewUrl : videoLink,
             name: memeName,
-            ticker: memeTicker
-        }
-        localStorage.setItem('adminReview', JSON.stringify(data))
+            ticker: memeTicker,
+            memeId: memeCount
+        };
+        localStorage.setItem('adminReview', JSON.stringify(data));
         handleCreateMemeTRX()
     }
 
